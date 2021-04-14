@@ -7,12 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <title>HTML Example</title>
-  <script src="../../dist/nowpayments-api.js"></script>
+  <script src="../../dist/nowpayments-mass-payments-api-js.min.js"></script>
 </head>
 
 <body>
   <h2>Html Examples</h2>
-  <h4>Available currencies</h4>
+  <h4>Get Balance</h4>
   <div id="loading" class="loading-dots">
     <div class="dot"></div>
     <div class="dot"></div>
@@ -20,21 +20,19 @@
   </div>
   <script>
     const myParent = document.body;
-    const api = new NOWPaymentsApi({ apiKey: 'A7M40XV-CG1448Z-KVVED3G-NW3V0TK' })
+    const api = new NOWPaymentsMPApiJS({ apiKey: '4WHVF3X-E61MR3A-PM6HKW4-CBF7JVQ' })
 
     async function main() {
-      const { currencies } = await api.getCurrencies()
+      const { token } = await api.auth({ email: 'kate.l@nowpayments.io', password: 'bogdan' })
+      const balance = await api.getBalance({ token })
 
-      if (currencies.length) {
-        const selectList = document.createElement("select")
-        selectList.id = "mySelect"
-        myParent.appendChild(selectList)
+      if (Object.keys(balance).length) {
+        const span = document.createElement("span")
+        span.id = "mySelect"
+        myParent.appendChild(span)
 
-        for (var i = 0; i < currencies.length; i++) {
-          const option = document.createElement("option")
-          option.value = currencies[i]
-          option.text = currencies[i]
-          selectList.appendChild(option)
+        for (const [key, value] of Object.entries(balance)) {
+          span.innerHTML = `${key} - ${value.amount}`
         }
 
         const loading = document.querySelector('#loading')
