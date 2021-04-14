@@ -23,14 +23,15 @@ Using unpkg CDN:
 ### Node JS
 
 ```js
-const NowPaymentsMPApi = require('@nowpaymentsio/nowpayments-api-js');
+const NowPaymentsMPApi = require('@nowpaymentsio/nowpayments-mass-payments-api-js');
 
 const api = new NowPaymentsMPApi({ apiKey: 'A7M40XV-CG1448Z-KVVED3G-NW3V0TK' }) // your api key
-async function logCurrencies() {
-  const { currencies } = await api.getCurrencies()
-  console.log(currencies)
+async function logBalance() {
+  const { token } = await api.auth({ email: 'kate.l@nowpayments.io', password: 'bogdan' })
+  const balance = await api.getBalance({ token })
+  console.log('Get balance: ', balance)
 }
-logCurrencies()
+logBalance()
 ```
 
 ### React
@@ -39,24 +40,25 @@ logCurrencies()
 import React from 'react'
 import NowPaymentsMPApi from '@nowpaymentsio/nowpayments-mass-payments-api-js'
 
-const npApi = new NowPaymentsMPApi({ apiKey: 'A7M40XV-CG1448Z-KVVED3G-NW3V0TK' }) // your api key
+const npApi = new NowPaymentsMPApi({ apiKey: '4WHVF3X-E61MR3A-PM6HKW4-CBF7JVQ' }) // your api key
 
 const App = () => {
-  const [currenciesArr, setCurrenciesArr] = React.useState([])
+  const [balance, setBalance] = React.useState()
   React.useEffect(() => {
-    async function fetchCurrencies() {
-      const { currencies } = await npApi.getCurrencies()
-      setCurrenciesArr(currencies)
+    async function fetchBalance() {
+      const { token } = await npApi.auth({ email: 'kate.l@nowpayments.io', password: 'bogdan' })
+      const balance = await npApi.getBalance({ token })
+      setBalance(balance)
     }
-    fetchCurrencies()
+    fetchBalance()
   }, [])
 
   return (
     <div>
-      <h2>Available currencies</h2>
+      <h2>Get balance</h2>
       <br />
-      {currenciesArr.map((currency) => (
-        <p>{currency}</p>
+      {balance && Object.entries(balance).map(([key, value]) => (
+        <p key={key}>{key}-{value.amount}</p>
       ))}
     </div>
   )
@@ -78,51 +80,61 @@ export default App
 </head>
 
 <body>
-  <h4>Available currencies</h4>
-  <script>
-    const body = document.body;
-    const api = new NOWPaymentsMPApiJS({ apiKey: 'A7M40XV-CG1448Z-KVVED3G-NW3V0TK' }) // your api key
+<h4>Get balance</h4>
+<script>
+  const myParent = document.body;
+  const api = new NOWPaymentsMPApiJS({ apiKey: '4WHVF3X-E61MR3A-PM6HKW4-CBF7JVQ' })
 
-    async function fetchCurrencies() {
-      const { currencies } = await api.getCurrencies()
-        const selectList = document.createElement("select")
-        selectList.id = "mySelect"
-        body.appendChild(selectList)
+  async function main() {
+    const { token } = await api.auth({ email: 'kate.l@nowpayments.io', password: 'bogdan' })
+    const balance = await api.getBalance({ token })
 
-      for (var i = 0; i < currencies.length; i++) {
-        const option = document.createElement("option")
-        option.value = currencies[i]
-        option.text = currencies[i]
-        selectList.appendChild(option)
+    if (Object.keys(balance).length) {
+      const span = document.createElement("span")
+      span.id = "mySelect"
+      myParent.appendChild(span)
+
+      for (const [key, value] of Object.entries(balance)) {
+        span.innerHTML = `${key} - ${value.amount}`
       }
     }
-    fetchCurrencies()
-  </script>
+  }
+  main()
+</script>
 </body>
 </html>
 ```
 ## Methods
 &nbsp;
-#### NPApi.status()
-Get API status
+#### NPApi.auth(params)
+Authentication
 **params**       | **default** | **required** | **description**                                        
 ------------------|-------------|--------------|--------------------------------------------------------                                   
-&nbsp; | &nbsp;       | &nbsp;           | &nbsp;
+email | null | true | Account email
+password | null | true | Account password
 
-#### NPApi.getCurrencies()
-Get available currencies
+#### NPApi.createPayout(params)
+This is the method to create a payout
 **params**       | **default** | **required** | **description**                                        
 ------------------|-------------|--------------|--------------------------------------------------------                                   
-&nbsp; | &nbsp;       | &nbsp;           | &nbsp;
+address  | null | true | The address where you want to send funds
+currency  | null | true | Payout currency
+amount | null | true | Amount of the payout. Must not exceed 6 decimals (i.e. 0.123456)
 
-#### NPApi.getEstimatePrice(params)
+#### NPApi.getPayoutStatus(params)
 Get estimated price
 **params**       | **default** | **required** | **description**                                        
 ------------------|-------------|--------------|--------------------------------------------------------                                   
-amount | null | true | Initial cost in the fiat currency
+payout_id | null | true | Payout in the request
+
+#### NPApi.getBalance()
+Get payment status
+**params**       | **default** | **required** | **description**                                        
+------------------|-------------|--------------|--------------------------------------------------------                                   
+&nbsp; | &nbsp; | &nbsp;|&nbsp;
 
 #### NPApi.createPayment(params)
-Create payment
+Get payout status
 **params**       | **default** | **required** | **description**                                        
 ------------------|-------------|--------------|--------------------------------------------------------                                   
 price_amount | null | true | Fiat equivalent of the price to be paid in crypto
@@ -138,43 +150,6 @@ payout_currency | null | false | Currency of your external payout_address, requi
 payout_extra_id | null | false | Extra id or memo or tag for external payout_address
 fixed_rate | null | false | Boolean, can be true or false. Required for fixed-rate exchanges
 
-#### NPApi.getPaymentStatus(params)
-Get payment status
-**params**       | **default** | **required** | **description**                                        
-------------------|-------------|--------------|--------------------------------------------------------                                   
-payment_id | null | true | ID of the payment
-
-#### NPApi.getMinimumPaymentAmount(params)
-Get the minimum payment amount
-**params**       | **default** | **required** | **description**                                        
-------------------|-------------|--------------|--------------------------------------------------------                                   
-currency_from | null | true | Ticker currency
-currency_to | null | true | Ticker currency
-
-#### NPApi.getListPayments(params)
-Get list of payments
-**params**       | **default** | **required** | **description**                                        
-------------------|-------------|--------------|--------------------------------------------------------                                   
-limit | 10 | false | Number of records in one page
-page | 0 | false | Page number you want to get
-sortBy | created_at | false | Sort the received list by a paramenter.
-orderBy | asc | false | Display the list in ascending or descending order
-dateFrom | null | false | Select the displayed period start date (date format: YYYY-MM-DD or yy-MM-ddTHH:mm:ss.SSSZ)
-dateTo | null | false | Select the displayed period end date (date format: YYYY-MM-DD or yy-MM-ddTHH:mm:ss.SSSZ)
-
-#### NPApi.createInvoice(params)
-Create invoice
-**params**       | **default** | **required** | **description**                                        
-------------------|-------------|--------------|--------------------------------------------------------                                   
-price_amount | null | true | He amount that users have to pay for the order stated in fiat currency. In case you do not indicate the price in crypto, our system will automatically convert this fiat amount in crypto equivalent
-price_currency | null | true | The fiat currency in which the price_amount is specified (usd, eur, etc)
-pay_currency | null | false | The crypto currency in which the pay_amount is specified (btc, eth, etc).If not specified, can be choosen on the invoice_url
-ipn_callback_url | null | false | Url to receive callbacks, should contain "http" or "https", eg. "https://nowpayments.io"
-order_id | null | false | Inner store order ID, e.g. "RGDBP-21314"
-order_description | null | false | Inner store order description, e.g. "Apple Macbook Pro 2019 x 1"
-success_url | null | false | Url where the customer will be redirected after sucesfull payment
-cancel_url | null | false | Url where the customer will be redirected after failed payment
-
 ## Resources
 
-* [Documentation API](https://documenter.getpostman.com/view/7907941/S1a32n38)
+* [Documentation API](https://documenter.getpostman.com/view/7907941/T1DtdF9a)
