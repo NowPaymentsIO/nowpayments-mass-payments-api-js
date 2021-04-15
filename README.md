@@ -119,11 +119,11 @@ This is the method to create a payout
 ------------------|-------------|--------------|--------------------------------------------------------
 withdrawals  | null | true | Array of objects
 token  | null | true | Auth token from NPApi.auth()
-```json
-"withdrawals": [
-	"address": '', // The address where you want to send funds
-	"currency": '', // Payout currency
-	"amount": 0 // Amount of the payout. Must not exceed 6 decimals (i.e. 0.123456)
+```js
+withdrawals: [
+  address: '', // The address where you want to send funds
+  currency: '', // Payout currency
+  amount: 0 // Amount of the payout. Must not exceed 6 decimals (i.e. 0.123456)
 ]
 ```
 
