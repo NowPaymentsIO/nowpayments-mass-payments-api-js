@@ -1,6 +1,6 @@
 {
   "name": "@nowpaymentsio/nowpayments-mass-payments-api-js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A library for interacting with the NOWPayments Mass Payments API",
   "author": "bogdanaks <bogdan@nowpayments.io> (https://github.com/bogdanaks)",
   "main": "./dist/nowpayments-mass-payments-api-js.js",
