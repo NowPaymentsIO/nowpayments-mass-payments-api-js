@@ -121,9 +121,11 @@ withdrawals  | null | true | Array of objects
 token  | null | true | Auth token from NPApi.auth()
 ```js
 withdrawals: [
-  address: '', // The address where you want to send funds
-  currency: '', // Payout currency
-  amount: 0 // Amount of the payout. Must not exceed 6 decimals (i.e. 0.123456)
+  {
+    address: '', // The address where you want to send funds
+    currency: '', // Payout currency
+    amount: 0 // Amount of the payout. Must not exceed 6 decimals (i.e. 0.123456)
+  }
 ]
 ```
 
