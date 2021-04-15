@@ -116,10 +116,16 @@ password | null | true | Account password
 #### NPApi.createPayout(params)
 This is the method to create a payout
 **params**       | **default** | **required** | **description**                                        
-------------------|-------------|--------------|--------------------------------------------------------                                   
-address  | null | true | The address where you want to send funds
-currency  | null | true | Payout currency
-amount | null | true | Amount of the payout. Must not exceed 6 decimals (i.e. 0.123456)
+------------------|-------------|--------------|--------------------------------------------------------
+withdrawals  | null | true | Array of objects
+token  | null | true | Auth token from NPApi.auth()
+```json
+"withdrawals": [
+	"address": '', // The address where you want to send funds
+	"currency": '', // Payout currency
+	"amount": 0 // Amount of the payout. Must not exceed 6 decimals (i.e. 0.123456)
+]
+```
 
 #### NPApi.getPayoutStatus(params)
 Get estimated price
@@ -127,11 +133,11 @@ Get estimated price
 ------------------|-------------|--------------|--------------------------------------------------------                                   
 payout_id | null | true | Payout in the request
 
-#### NPApi.getBalance()
+#### NPApi.getBalance(params)
 Get payment status
 **params**       | **default** | **required** | **description**                                        
 ------------------|-------------|--------------|--------------------------------------------------------                                   
-&nbsp; | &nbsp; | &nbsp;|&nbsp;
+token | null | true | Auth token from NPApi.auth()
 
 #### NPApi.createPayment(params)
 Get payout status
