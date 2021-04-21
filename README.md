@@ -40,13 +40,13 @@ logBalance()
 import React from 'react'
 import NowPaymentsMPApi from '@nowpaymentsio/nowpayments-mass-payments-api-js'
 
-const npApi = new NowPaymentsMPApi({ apiKey: '4WHVF3X-E61MR3A-PM6HKW4-CBF7JVQ' }) // your api key
+const npApi = new NowPaymentsMPApi({ apiKey: 'your-api-key' }) // your api key
 
 const App = () => {
   const [balance, setBalance] = React.useState()
   React.useEffect(() => {
     async function fetchBalance() {
-      const { token } = await npApi.auth({ email: 'kate.l@nowpayments.io', password: 'bogdan' })
+      const { token } = await npApi.auth({ email: 'your-email', password: 'your-password' })
       const balance = await npApi.getBalance({ token })
       setBalance(balance)
     }
@@ -83,10 +83,10 @@ export default App
 <h4>Get balance</h4>
 <script>
   const myParent = document.body;
-  const api = new NOWPaymentsMPApiJS({ apiKey: '4WHVF3X-E61MR3A-PM6HKW4-CBF7JVQ' })
+  const api = new NOWPaymentsMPApiJS({ apiKey: 'your-api-key' })
 
   async function main() {
-    const { token } = await api.auth({ email: 'kate.l@nowpayments.io', password: 'bogdan' })
+    const { token } = await api.auth({ email: 'your-email', password: 'your-password' })
     const balance = await api.getBalance({ token })
 
     if (Object.keys(balance).length) {
