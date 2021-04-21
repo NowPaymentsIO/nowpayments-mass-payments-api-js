@@ -25,9 +25,9 @@ Using unpkg CDN:
 ```js
 const NowPaymentsMPApi = require('@nowpaymentsio/nowpayments-mass-payments-api-js');
 
-const api = new NowPaymentsMPApi({ apiKey: 'A7M40XV-CG1448Z-KVVED3G-NW3V0TK' }) // your api key
+const api = new NowPaymentsMPApi({ apiKey: 'your-api-key' }) // your api key
 async function logBalance() {
-  const { token } = await api.auth({ email: 'kate.l@nowpayments.io', password: 'bogdan' })
+  const { token } = await api.auth({ email: 'your-email', password: 'your-password' })
   const balance = await api.getBalance({ token })
   console.log('Get balance: ', balance)
 }

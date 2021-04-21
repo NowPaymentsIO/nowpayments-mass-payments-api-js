@@ -20,10 +20,10 @@
   </div>
   <script>
     const myParent = document.body;
-    const api = new NOWPaymentsMPApiJS({ apiKey: '4WHVF3X-E61MR3A-PM6HKW4-CBF7JVQ' })
+    const api = new NOWPaymentsMPApiJS({ apiKey: 'your-api-key' })
 
     async function main() {
-      const { token } = await api.auth({ email: 'kate.l@nowpayments.io', password: 'bogdan' })
+      const { token } = await api.auth({ email: 'your-email', password: 'your-password' })
       const balance = await api.getBalance({ token })
 
       if (Object.keys(balance).length) {
